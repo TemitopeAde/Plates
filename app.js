@@ -5,11 +5,8 @@ const cors = require('cors');
 const app = express();
 const mongoose = require('mongoose');
 
-
 // Use cors middleware to allow CORS on all sites.
 app.use(cors());
-
-
 
 console.log(process.env.URI);
 mongoose.connect(process.env.URI, {
@@ -18,16 +15,18 @@ mongoose.connect(process.env.URI, {
   dbName: 'Plates', // Specify the database name
 });
 
-
 // Define schema for the collection
 const plateSchema = new mongoose.Schema({}, { collection: 'New plates' });
 const otherSchema = new mongoose.Schema({}, { collection: 'Plates' }); // Define schema for the other collection
-
 
 // Define model for the collection
 const Plate = mongoose.model('Plate', plateSchema);
 const OtherPlate = mongoose.model('PlateTwo', otherSchema); // Define model for the other collection
 
+// Create an Axios instance with increased timeout
+const axiosInstance = axios.create({
+  timeout: 10000, // 10 seconds timeout
+});
 
 app.get("/", (req, res) => {
   const date = req.query.date;
@@ -40,7 +39,8 @@ app.get("/", (req, res) => {
     }
   };
 
-  axios.request(options)
+  // Use the axiosInstance instead of axios
+  axiosInstance.request(options)
     .then(function (response) {
       // Send the API response data back to the client as JSON
       res.status(200).json({
@@ -61,7 +61,7 @@ app.get("/", (req, res) => {
 // New endpoint to interact with the other collection
 app.get("/plates", async (req, res) => {
   try {
-    const searchLetters = req.query.letters; 
+    const searchLetters = req.query.letters;
 
     const searchPattern = new RegExp(searchLetters, 'i');
     console.log(searchPattern);
@@ -82,13 +82,11 @@ app.get("/plates", async (req, res) => {
 
 app.get("/new-plates", async (req, res) => {
   try {
-    const searchLetters = req.query.letters; // Get the letters to search for from the query string
+    const searchLetters = req.query.letters;
 
-    // Create a regular expression pattern to match plates containing the specified letters
-    const searchPattern = new RegExp(searchLetters, 'i'); // 'i' flag for case-insensitive matching
+    const searchPattern = new RegExp(searchLetters, 'i');
     console.log(searchPattern);
 
-    // Fetch plates from the 'plates' collection that contain the specified letters in the plate number
     const plates = await Plate.find({ letters: searchPattern })
 
     res.status(200).json({
