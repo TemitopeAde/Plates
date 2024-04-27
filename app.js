@@ -80,7 +80,7 @@ app.get("/plates", async (req, res) => {
   }
 });
 
-app.get("/new-plates", async (req, res) => {
+app.get("/ni-plates", async (req, res) => {
   try {
     const searchLetters = req.query.letters;
 
