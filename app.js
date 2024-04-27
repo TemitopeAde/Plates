@@ -16,16 +16,12 @@ mongoose.connect(process.env.URI, {
 });
 
 // Define schema for the collection
-const plateSchema = new mongoose.Schema({}, { collection: 'Ni plates' });
+const plateSchema = new mongoose.Schema({}, { collection: 'New plates' });
 const otherSchema = new mongoose.Schema({}, { collection: 'Plates' }); // Define schema for the other collection
-const newSchema = new mongoose.Schema({}, { collection: 'New plates' });
-
 
 // Define model for the collection
 const Plate = mongoose.model('Plate', plateSchema);
 const OtherPlate = mongoose.model('PlateTwo', otherSchema); // Define model for the other collection
-const newPlate = mongoose.model('PlateThree', newSchema);
-
 
 // Create an Axios instance with increased timeout
 const axiosInstance = axios.create({
@@ -84,7 +80,7 @@ app.get("/plates", async (req, res) => {
   }
 });
 
-app.get("/ni-plates", async (req, res) => {
+app.get("/new-plates", async (req, res) => {
   try {
     const searchLetters = req.query.letters;
 
