@@ -16,7 +16,7 @@ mongoose.connect(process.env.URI, {
 });
 
 // Define schema for the collection
-const plateSchema = new mongoose.Schema({}, { collection: 'New plates' });
+const plateSchema = new mongoose.Schema({}, { collection: 'Ni plates' });
 const otherSchema = new mongoose.Schema({}, { collection: 'Plates' }); // Define schema for the other collection
 
 // Define model for the collection
